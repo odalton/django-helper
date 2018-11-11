@@ -20,13 +20,13 @@ Django admin bar add internal IPs
 INTERNAL_IPS = ('127.0.0.1',)
 ```
 
-Login redirect path
+Login redirect path - if not defined login() goes to /accounts/profile
 ```
 LOGIN_REDIRECT_URL = '/'
 ```
 
 ## Models
-
+Names that the template access the querysets as (CBV)
 * object_list
 * object
 * instance
@@ -79,9 +79,20 @@ url(r'projects/(?P<my_id>\d+)/', dynamic_lookup_view),
 url(r'projects/(<int:my_id>/', dynamic_lookup_view),
 ```
 
+## Email
+Localhost email debugging
+```
+python -m smtpd -n -c DebuggingServer localhost:1025
+and adjust your mail settings accordingly:
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+```
+
 
 ## External Refs
 
 * https://www.codingforentrepreneurs.com/blog/common-regular-expressions-for-django-urls/ common regex
 * https://rayed.com/posts/2018/05/django-crud-create-retrieve-update-delete/ basic crud using class based views
 * https://www.youtube.com/watch?v=L6y6cn1XUfw ckeditor
+* https://scotch.io/tutorials/an-introduction-to-regex-in-python regex
