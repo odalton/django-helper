@@ -224,3 +224,37 @@ class DesignerPaginateListView(ListView):
 
         return context
 ```
+
+
+```
+from django import forms
+from .models import DesignTypes
+
+class DesignTypesForm(forms.Form):
+    # name = forms.ModelChoiceField(queryset=DesignTypes.objects.all())
+    choices = [(u'-1', u'Select Year')]
+    choices.extend([(choice.pk, choice) for choice in DesignTypes.objects.all()])
+    name = forms.ChoiceField(widget=forms.Select(attrs={
+        'name': 'test'
+    }), label='category', choices=choices)
+
+
+class DesignerBasicPaginateListView(ListView):
+    model = Designer
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('name')
+        if query == '-1':
+            qs = Designer.objects.all().order_by('-id')
+        else:
+            qs = Designer.objects.filter(types=query)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(DesignerBasicPaginateListView, self).get_context_data(**kwargs)
+        qs = DesignTypes.objects.all()
+        context['types'] = qs
+        context['dynamic_types'] = DesignTypesForm()
+        return context
+```
